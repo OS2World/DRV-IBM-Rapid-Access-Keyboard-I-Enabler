@@ -1,0 +1,97 @@
+#===================================================================
+#
+#   Auto-dependency information
+#
+#===================================================================
+OS22_H    = $(%WATCOM)\h\os2
+C32FLAGS  = -i=$(OS22_H) -bt=OS2 -zq
+WC32      = wcc386 $(C32FLAGS)
+
+NAME      = ibmra1
+WMAPNAME  = mapfile
+
+# Watcom debug options
+!ifdef DEBUG
+DEBUG     =-DDEBUG
+C386DEBUG =-d3 -hc
+LNK_DEBUG =/CO  # ***********************  NEEDS TO BE CHANGED FOR WLINK   !!
+!endif
+
+
+OS21_H    = $(%WATCOM)\h\os21x
+C16FLAGS  = -i=$(OS21_H) -i=include -bt=os2 -d2 -d_PDD_ -ms -5 -omi -s -zdp -zff -zgf -zu -zl -zq
+WC16      = wcc $(C16FLAGS)
+AFLAGS    =-bt=os2 -d1 -zq $(DEBUG)
+ASM       = wasm $(AFLAGS)
+
+.SUFFIXES:
+.SUFFIXES: .obj .c .asm
+
+
+.c{obj}.obj: .AUTODEPEND
+        @Echo --------------------------------------------------------
+        @Echo - Creating $@
+        @Echo --------------------------------------------------------
+        @$(WC16) $^&.c -Fo$@
+!ifdef DEBUG
+        @wdis -l -s -e -p $*
+!endif
+
+.asm.obj: .AUTODEPEND
+        @Echo --------------------------------------------------------
+        @Echo - Creating $@
+        @Echo --------------------------------------------------------
+        @$(ASM) $^&.asm -Fo$@
+!ifdef DEBUG
+        @wdis -l -s -e -p $*
+!endif
+
+all:    dirs .SYMBOLIC bin\$(NAME).sys bin\$(NAME).sym
+        @Echo --------------------------------------------------------
+        @Echo - All Done !
+        @Echo --------------------------------------------------------
+
+HROBJS  =  obj\devsegs.obj  obj\strategy.obj obj\stratini.obj obj\header.obj
+bin\$(NAME).sys : $(HROBJS)
+        @Echo --------------------------------------------------------
+        @Echo - Linking $@
+        @Echo --------------------------------------------------------
+        @%create obj\$(NAME).lnk
+        @%append obj\$(NAME).lnk option symfile=bin\$(NAME).dbg
+        @%append obj\$(NAME).lnk debug codeview
+        @%append obj\$(NAME).lnk name bin\$(NAME).sys
+        @%append obj\$(NAME).lnk sys os2 dll initglobal
+        @%append obj\$(NAME).lnk option map=bin\$(WMAPNAME).
+        @%append obj\$(NAME).lnk option quiet
+        @%append obj\$(NAME).lnk lib os2
+        @%append obj\$(NAME).lnk lib clibs
+        @%append obj\$(NAME).lnk lib E:\DDK\BASE\lib\dhcalls.lib
+        @for %f in ($(HROBJS)) do @%append obj\$(NAME).lnk file %f
+        @wlink  @obj\$(NAME).lnk
+
+bin\$(NAME).sym: bin\$(WMAPNAME)
+        @Echo --------------------------------------------------------
+        @Echo - Creating $@
+        @Echo --------------------------------------------------------
+        @wat2map bin\$(WMAPNAME) bin\$(NAME).MAP
+        @mapsym bin\$(NAME).MAP
+        @copy $(NAME).sym bin >nul 2>nul
+        @rm $(NAME).sym >nul 2>nul
+
+dirs : .SYMBOLIC
+        @Echo --------------------------------------------------------
+        @Echo - Creating paths
+        @Echo --------------------------------------------------------
+        @if not exist obj md obj >nul 2>nul
+        @if not exist bin md bin >nul 2>nul
+
+clean : .SYMBOLIC
+        @Echo --------------------------------------------------------
+        @Echo - Cleaning up
+        @Echo --------------------------------------------------------
+        @if exist bin\*.sys @rm -r bin\*
+        @if exist obj\*.obj @rm -r obj\*
+        @if exist *.err @rm *.err
+        @if exist mapfile @rm mapfile
+
+
