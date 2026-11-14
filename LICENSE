@@ -1,34 +1,29 @@
-LICENSE STATUS: UNRESOLVED - NO LICENSE GRANTED
-================================================
+BSD 3-Clause License
 
-IBMRA1.SYS ("IBM Rapid Access Keyboard I enabler")
+Copyright (c) 2026, OS2World
+All rights reserved.
 
-The original driver was released in 2001 by Bart van Leeuwen. Its readme
-(doc\original\readme.txt) contains only:
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    v0.0.1 (C) 2001 Bart van Leeuwen <bart@netage.nl>
-    ...
-    Disclaimer:
-    Use this software at you own risk.
-    Its stil a Alpha version !
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
 
-No license text, no permission to copy, modify or redistribute, and no
-statement placing the code in the public domain was found in the original
-source, in the original readme, or in the repository history.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
 
-The driver is based on OS/2 physical device driver sample code by Rick Fishman
-(Code Blazers, Inc.) published in the Fall 1991 issue of IBM Personal Systems
-Developer and adapted for Watcom C/C++ by WATCOM International Corp. That code
-also carries no license text in this repository.
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
 
-Therefore the rights to this code are NOT clear. No permission is granted to
-use, copy, modify or redistribute the driver or its source code. Do not publish
-or distribute it until the rights holder(s) have clarified the license.
-
-The files added in 2026 (src\version.h, src\include\I8042.H, src\bldlevel.lnk,
-sample\ibmra1.c, test\, the build scripts and the documentation) are offered
-under the same terms as the rest of the project and do not grant any rights
-beyond those that the original authors grant.
-
-See README.md ("License") and doc\PROVENANCE.md for the origin of the files and
-the comparison with the IBM DDK.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.

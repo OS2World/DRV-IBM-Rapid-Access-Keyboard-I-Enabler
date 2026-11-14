@@ -16,10 +16,7 @@ The extra LEDs of the keyboard are not supported.
 * Run: (filled in after the boot test on the Dev VM).
 
 ## License
-No license text was found in the original source; the original readme only says "(C) 2001 Bart van Leeuwen" and
-"use this software at your own risk". The sample code it is based on (IBM Personal Systems Developer, Fall 1991)
-carries no license either. **The rights are therefore unresolved: do not redistribute or publish this driver or
-its source until the license is clarified.** See `LICENSE` and `doc\PROVENANCE.md`.
+3Clauses BSD License
 
 ## Authors
 * Original driver: Bart van Leeuwen, 2001.

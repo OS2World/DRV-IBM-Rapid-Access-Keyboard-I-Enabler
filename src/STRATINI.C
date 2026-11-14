@@ -1,4 +1,4 @@
-/*================================================================\
+/*================================================================
 |                                                                 |
 |      OS/2 Physical Device Driver Example Code                   |
 |                  for Watcom C/C++ 11.0c                         |
@@ -182,6 +182,24 @@ static void ParseArgs( const char FAR *p )
     }
 }
 
+/* diagonal test: only /W, no other options */
+/* temporary diagnostic: print what the console read returns */
+static void WaitKey( void )
+{
+    USHORT rc;
+
+    Emit( "Press any key to continue." );
+    rc = DosRead( 0, (void FAR *)&key, 1, (USHORT FAR *)&got );
+    if( fVerbose ) {
+        text[0] = 0;
+        AddStr( "Console read: rc " );
+        AddNum( rc, 0 );
+        AddStr( ", got " );
+        AddNum( got, 0 );
+        Emit( text );
+    }
+}
+
 extern VOID StratInit( REQP_INIT FAR *rp )
 {
     USHORT        ret;
@@ -224,10 +242,8 @@ extern VOID StratInit( REQP_INIT FAR *rp )
             AddStr( "). Enable sequence sent." );
             Emit( text );
         }
-        if( fWait && !fQuiet ) {
-            Emit( "Press any key to continue." );
-            DosRead( 0, (void FAR *)&key, 1, (USHORT FAR *)&got );
-        }
+        if( fWait && !fQuiet )
+            WaitKey();
         if( fBeep )
             DosBeep( 1000, 120 );
     } else {
@@ -241,10 +257,8 @@ extern VOID StratInit( REQP_INIT FAR *rp )
                     "accept the enable sequence." );
         }
         Emit( text );
-        if( fWait && !fQuiet ) {
-            Emit( "Press any key to continue." );
-            DosRead( 0, (void FAR *)&key, 1, (USHORT FAR *)&got );
-        }
+        if( fWait && !fQuiet )
+            WaitKey();
     }
 
     if( ok )
