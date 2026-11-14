@@ -125,7 +125,6 @@ test\smoke.cmd
 ```
 
 ## Known issues
-* **License unresolved** (see above). Do not publish until it is clear.
 * Not tested on real hardware; tested only on the VirtualBox Dev VM.
 * The extra LEDs of the keyboard are not supported (same as the original).
 * The driver talks to the keyboard controller at I/O ports 0x60/0x64 directly. Do not load it together with
