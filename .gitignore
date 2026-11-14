@@ -1,0 +1,9 @@
+# build output (not in git)
+bin/
+*.obj
+*.map
+compile.log
+*.log
+*.err
+*.bak
+tmp/

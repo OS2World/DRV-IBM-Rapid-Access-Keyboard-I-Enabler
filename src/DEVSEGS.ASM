@@ -52,7 +52,7 @@ _DATA	    ends
 
 
 _TEXT	    segment word public use16 'CODE'
-	    assume cs:CGROUP, ds:DGROUP, es:NOTHING, ss:NOTHING
+	    assume cs:_TEXT, ds:DGROUP, es:NOTHING, ss:NOTHING
 _TEXT	    ends
 
 

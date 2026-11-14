@@ -1,0 +1,4 @@
+*.cmd text eol=crlf
+*.wat text eol=crlf
+*.lnk text eol=crlf
+*.asm text eol=crlf
