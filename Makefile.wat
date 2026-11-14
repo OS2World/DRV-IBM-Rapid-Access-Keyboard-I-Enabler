@@ -25,9 +25,10 @@ ASFLAGS = -bt=os2 -d1 -zq
 # DEVSEGS first: it declares the segment order and the DGROUP layout, so the
 # device header (_HEADER) is at offset 0 of the data segment. Keep this order.
 OBJS = $(OBJ)\devsegs.obj $(OBJ)\strategy.obj $(OBJ)\stratini.obj $(OBJ)\header.obj
-HDRS = $(INC)\DEVDEFS.H $(INC)\DEVHDR.H $(INC)\DEVREQP.H $(INC)\DEVAUX.H
+HDRS = $(INC)\DEVDEFS.H $(INC)\DEVHDR.H $(INC)\DEVREQP.H $(INC)\DEVAUX.H &
+       $(INC)\I8042.H $(SRC)\version.h
 
-all: $(OBJ)\$(NAME).sys .SYMBOLIC
+all: $(OBJ)\$(NAME).sys $(OBJ)\$(NAME).exe .SYMBOLIC
 
 $(OBJ)\devsegs.obj: $(SRC)\DEVSEGS.ASM
 	-@mkdir $(OBJ) > nul 2>&1
@@ -47,11 +48,12 @@ $(OBJ)\header.obj: $(SRC)\HEADER.C $(HDRS)
 
 # Link as a 16-bit NE device driver. "system os2 dll initglobal" is the link
 # form measured to install from DEVICE= (see README.md, "Link recipe").
-$(OBJ)\$(NAME).sys: $(OBJS)
+$(OBJ)\$(NAME).sys: $(OBJS) $(SRC)\bldlevel.lnk
 	@%create $(OBJ)\$(NAME).lnk
 	@%append $(OBJ)\$(NAME).lnk system os2 dll initglobal
 	@%append $(OBJ)\$(NAME).lnk option protmode
 	@%append $(OBJ)\$(NAME).lnk name $(OBJ)\$(NAME).sys
+	@%append $(OBJ)\$(NAME).lnk @$(SRC)\bldlevel.lnk
 	@%append $(OBJ)\$(NAME).lnk option map=$(OBJ)\$(NAME).map
 	@%append $(OBJ)\$(NAME).lnk option quiet
 	@%append $(OBJ)\$(NAME).lnk library $(%WATCOM)\lib286\os2\os2.lib
@@ -62,5 +64,14 @@ $(OBJ)\$(NAME).sys: $(OBJS)
 	@%append $(OBJ)\$(NAME).lnk file $(OBJ)\header.obj
 	wlink @$(OBJ)\$(NAME).lnk
 
+# sample / test program (32-bit OS/2): open \DEV\IBMRA1, read the stored byte,
+# and optionally write a new value (the driver sends it to the keyboard LEDs)
+$(OBJ)\$(NAME).exe: sample\ibmra1.c
+	-@mkdir $(OBJ) > nul 2>&1
+	wcc386 -zq -bt=os2 -i=$(%WATCOM)\h -i=$(%WATCOM)\h\os2 -fo=$(OBJ)\ibmra1.obj sample\ibmra1.c
+	wlink system os2v2 name $(OBJ)\$(NAME).exe file $(OBJ)\ibmra1.obj option quiet
+
 clean: .SYMBOLIC
 	-@echo y | del $(OBJ)\*.* > nul 2>&1
+	-@rmdir $(OBJ) > nul 2>&1
+	-@del *.err > nul 2>&1

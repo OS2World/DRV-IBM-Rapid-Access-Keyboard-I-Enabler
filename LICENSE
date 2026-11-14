@@ -1,0 +1,34 @@
+LICENSE STATUS: UNRESOLVED - NO LICENSE GRANTED
+================================================
+
+IBMRA1.SYS ("IBM Rapid Access Keyboard I enabler")
+
+The original driver was released in 2001 by Bart van Leeuwen. Its readme
+(doc\original\readme.txt) contains only:
+
+    v0.0.1 (C) 2001 Bart van Leeuwen <bart@netage.nl>
+    ...
+    Disclaimer:
+    Use this software at you own risk.
+    Its stil a Alpha version !
+
+No license text, no permission to copy, modify or redistribute, and no
+statement placing the code in the public domain was found in the original
+source, in the original readme, or in the repository history.
+
+The driver is based on OS/2 physical device driver sample code by Rick Fishman
+(Code Blazers, Inc.) published in the Fall 1991 issue of IBM Personal Systems
+Developer and adapted for Watcom C/C++ by WATCOM International Corp. That code
+also carries no license text in this repository.
+
+Therefore the rights to this code are NOT clear. No permission is granted to
+use, copy, modify or redistribute the driver or its source code. Do not publish
+or distribute it until the rights holder(s) have clarified the license.
+
+The files added in 2026 (src\version.h, src\include\I8042.H, src\bldlevel.lnk,
+sample\ibmra1.c, test\, the build scripts and the documentation) are offered
+under the same terms as the rest of the project and do not grant any rights
+beyond those that the original authors grant.
+
+See README.md ("License") and doc\PROVENANCE.md for the origin of the files and
+the comparison with the IBM DDK.

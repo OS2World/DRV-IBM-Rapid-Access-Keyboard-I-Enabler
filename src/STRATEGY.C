@@ -23,7 +23,14 @@
 #include <conio.h>
 #include "devreqp.h"
 #include "devaux.h"
+#include "i8042.h"
 
+/*
+ * 2026 (ArcaOS port): the keyboard controller waits are bounded (see
+ * src\include\I8042.H) so that a missing or stuck controller cannot hang the
+ * machine with interrupts disabled. The bytes sent are unchanged.
+ * See doc\CHANGES.md.
+ */
 
 ULONG  DevHlp;  // DevHelp Interface Address
 CHAR cStatusLed='T';
@@ -56,7 +63,6 @@ Exit:
 static VOID StratWrite( REQP_RWV FAR *rp )
 {
         PVOID virt;
-        char z;
 
        _disable();
 
@@ -73,18 +79,8 @@ static VOID StratWrite( REQP_RWV FAR *rp )
         else
          cStatusLed = *(char FAR*)virt;
 
-        outp(0x60,0xeb);
-        do {
-         z =inp(0x64);
-        } while ((z & 2) == 2 );
-        outp(0x60,0x00);
-        do {
-         z =inp(0x64);
-        } while ((z & 2) == 2 );
-        outp(0x60,cStatusLed);
-        do {
-         z =inp(0x64);
-        } while ((z & 2) == 2 );
+        if( !KbdWrite( 0xeb ) || !KbdWrite( 0x00 ) || !KbdWrite( cStatusLed ) )
+            goto Exit;
 Exit:
         _enable();
         rp->header.status |=  RPDONE;
@@ -110,6 +106,8 @@ static VOID StratClose( REQP_OPENCLOSE FAR *rp )
 #pragma aux STRATEGY far parm [es bx];
 #pragma aux (STRATEGY) Strategy;
 
+extern VOID StratInit( REQP_INIT FAR *rp );
+
 VOID Strategy(REQP_ANY FAR* rp)
 {
 
@@ -118,27 +116,27 @@ VOID Strategy(REQP_ANY FAR* rp)
     if( rp->header.command < RP_END ){
         switch( rp->header.command ){
         case RP_INIT:
-            StratInit( rp );
+            StratInit( (REQP_INIT FAR *)rp );
             break;
         case RP_READ:
-            StratRead( rp );
+            StratRead( (REQP_RWV FAR *)rp );
             break;
         case RP_READ_NO_WAIT:
         case RP_INPUT_STATUS:
         case RP_INPUT_FLUSH:
         case RP_WRITE:
-            StratWrite( rp );
+            StratWrite( (REQP_RWV FAR *)rp );
             break;
         case RP_WRITE_VERIFY:
         case RP_OUTPUT_STATUS:
         case RP_OUTPUT_FLUSH:
-            StratNoOp( rp );
+            StratNoOp( (REQP_HEADER FAR *)rp );
             break;
         case RP_OPEN:
-            StratOpen( rp );
+            StratOpen( (REQP_OPENCLOSE FAR *)rp );
             break;
         case RP_CLOSE:
-            StratClose( rp );
+            StratClose( (REQP_OPENCLOSE FAR *)rp );
             break;
         default:
             rp->header.status = RPERR_COMMAND | RPDONE;

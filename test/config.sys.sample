@@ -1,0 +1,7 @@
+REM CONFIG.SYS excerpt for IBMRA1.SYS (IBM Rapid Access Keyboard I enabler)
+REM Load it after the keyboard driver (KBD01.SYS or the ArcaOS equivalent).
+REM Options: (none) quiet; /V verbose; /Q no messages at all; /W wait for a key;
+REM          /AA beep when the driver is loaded. Options can be combined.
+DEVICE=C:\OS2\BOOT\IBMRA1.SYS
+REM DEVICE=C:\OS2\BOOT\IBMRA1.SYS /V
+REM DEVICE=C:\OS2\BOOT\IBMRA1.SYS /V /W /AA
